@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_toRightOf="@+id/iv_type"
-            android:text="Android Name" />
+            android:text="IP Address" />
 
         <TextView
             android:id="@+id/tv_mac"
@@ -38,7 +38,7 @@
             android:layout_below="@+id/tv_ip"
             android:layout_alignStart="@+id/tv_ip"
             android:layout_gravity="center_horizontal"
-            android:text="Android Version" />
+            android:text="Mac Address" />
 
         <TextView
             android:id="@+id/tv_name"
@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_gravity="center_horizontal"
-            android:text="Android Name" />
+            android:text="Device Name" />
 
         <TextView
             android:id="@+id/tv_date"
@@ -55,7 +55,7 @@
             android:layout_below="@+id/tv_name"
             android:layout_alignEnd="@+id/tv_name"
             android:layout_gravity="center_horizontal"
-            android:text="Android Version" />
+            android:text="Date Added" />
 
     </RelativeLayout>
 

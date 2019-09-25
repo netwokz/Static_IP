@@ -6,7 +6,7 @@ public class StaticIpRecord extends SugarRecord {
 
     String mIpAddress;
     String mMacAddress;
-    String mType;
+    int mType;
     String mName;
     String mDateAdded;
 
@@ -15,7 +15,7 @@ public class StaticIpRecord extends SugarRecord {
 
     }
 
-    public StaticIpRecord(String ip, String mac, String type, String name, String date) {
+    public StaticIpRecord(String ip, String mac, int type, String name, String date) {
 
         this.mIpAddress = ip;
         this.mMacAddress = mac;

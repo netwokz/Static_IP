@@ -1,6 +1,7 @@
 package com.netwokz.staticip;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,44 +42,49 @@ public class CustomAdapter extends RecyclerView.Adapter<StaticIpViewHolder> {
 
     @Override
     public void onBindViewHolder(final StaticIpViewHolder holder, final int i) {
-        String type = mStaticIpList.get(i).mType;
+        final StaticIpRecord tempRecord = mStaticIpList.get(i);
+//        String type = mStaticIpList.get(i).mType;
+        int type = tempRecord.mType;
+        Log.d("CustomAdapter", String.valueOf(type));
         int resId;
         switch (type) {
-            case "Laptop":
-                resId = R.drawable.ic_laptop_24px;
+//            case "Laptop":
+            case 1:
+                holder.mType.setImageResource(R.drawable.ic_laptop_24px);
+//                resId = R.drawable.ic_laptop_24px;
                 break;
-            case "Desktop":
-                resId = R.drawable.ic_desktop_windows_24px;
+//            case "Desktop":
+            case 2:
+                holder.mType.setImageResource(R.drawable.ic_desktop_windows_24px);
+//                resId = R.drawable.ic_desktop_windows_24px;
                 break;
-            case "Mobile":
-                resId = R.drawable.ic_phone_android_24px;
+//            case "Mobile":
+            case 3:
+                holder.mType.setImageResource(R.drawable.ic_phone_android_24px);
+//                resId = R.drawable.ic_phone_android_24px;
                 break;
-            case "Raspberry Pi":
-                resId = R.drawable.ic_devices_other_24px;
+//            case "Raspberry Pi":
+            case 4:
+                holder.mType.setImageResource(R.drawable.ic_devices_other_24px);
+//                resId = R.drawable.ic_devices_other_24px;
                 break;
             default:
-                resId = R.drawable.ic_device_unknown_24px;
+                holder.mType.setImageResource(R.drawable.ic_device_unknown_24px);
+//                resId = R.drawable.ic_device_unknown_24px;
         }
-        holder.mType.setImageResource(resId);
-        holder.mIp.setText(String.valueOf(mStaticIpList.get(i).mIpAddress));
-        holder.mMac.setText(mStaticIpList.get(i).mMacAddress);
-        holder.mName.setText(mStaticIpList.get(i).mName);
-        holder.mDate.setText(mStaticIpList.get(i).mDateAdded);
+//        holder.mType.setImageResource(resId);
+        holder.mIp.setText(tempRecord.mIpAddress);
+        holder.mMac.setText(tempRecord.mMacAddress);
+        holder.mName.setText(tempRecord.mName);
+        holder.mDate.setText(tempRecord.mDateAdded);
         holder.mCardView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 if (mListener != null)
-                    mListener.onCardLongClick(mStaticIpList.get(i));
+                    mListener.onCardLongClick(tempRecord);
                 return true;
             }
         });
-
-    }
-
-    public void updateView(List<StaticIpRecord> list) {
-        mStaticIpList.clear();
-        mStaticIpList.addAll(list);
-        notifyDataSetChanged();
     }
 
     @Override

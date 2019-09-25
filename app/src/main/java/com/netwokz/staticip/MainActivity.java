@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -55,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 data.add(generateRandomEntry());
                 adapter.notifyDataSetChanged();
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         });
     }
@@ -95,19 +94,20 @@ public class MainActivity extends AppCompatActivity {
         return mRandomIp;
     }
 
-    public String getRandomType() {
-        String mType;
-        String types[] = {"Desktop", "Laptop", "Mobile", "Raspberry Pi", "Other"};
+    public int getRandomType() {
+        int mTypes;
+//        String types[] = {"Desktop", "Laptop", "Mobile", "Raspberry Pi", "Other"};
+        int type[] = {1, 2, 3, 4, 5};
         Random rand = new Random();
-        mType = types[rand.nextInt(5)];
-        return mType;
+        mTypes = type[rand.nextInt(5)];
+        return mTypes;
     }
 
     public String getRandomName() {
         String mType;
-        String types[] = {"Desktop", "Laptop", "Mobile", "Raspberry Pi", "Other"};
+        String types[] = {"My Main PC", "My Laptop", "My Pixel 3 XL", "Garage Pi", "Pi Hole"};
         Random rand = new Random();
-        mType = types[rand.nextInt(5)];
+        mType = types[rand.nextInt(types.length)];
         return mType;
     }
 
