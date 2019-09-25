@@ -15,17 +15,17 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static RecyclerView.Adapter adapter;
+    private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    private static RecyclerView recyclerView;
-    private static ArrayList<StaticIpRecord> data;
+    private RecyclerView recyclerView;
+    private List<StaticIpRecord> data;
     static View.OnClickListener myOnClickListener;
 
     @Override
@@ -35,17 +35,9 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-            }
-        });
-
-        data = new ArrayList<StaticIpRecord>();
-        data.add(generateRandomEntry());
-        data.add(generateRandomEntry());
+        data = getStaticIpList();
+        //data.add(generateRandomEntry());
+        //data.add(generateRandomEntry());
 
         recyclerView = findViewById(R.id.my_recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -54,8 +46,23 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        adapter = new CustomAdapter(data);
+        adapter = new CustomAdapter(this, data);
         recyclerView.setAdapter(adapter);
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                data.add(generateRandomEntry());
+                adapter.notifyDataSetChanged();
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            }
+        });
+    }
+
+    private List<StaticIpRecord> getStaticIpList() {
+        List<StaticIpRecord> mList = StaticIpRecord.listAll(StaticIpRecord.class);
+        return mList;
     }
 
     @Override
@@ -91,16 +98,16 @@ public class MainActivity extends AppCompatActivity {
     public String getRandomType() {
         String mType;
         String types[] = {"Desktop", "Laptop", "Mobile", "Raspberry Pi", "Other"};
-        Random rand = new Random(5);
-        mType = types[1];
+        Random rand = new Random();
+        mType = types[rand.nextInt(5)];
         return mType;
     }
 
     public String getRandomName() {
         String mType;
         String types[] = {"Desktop", "Laptop", "Mobile", "Raspberry Pi", "Other"};
-        Random rand = new Random(5);
-        mType = types[1];
+        Random rand = new Random();
+        mType = types[rand.nextInt(5)];
         return mType;
     }
 

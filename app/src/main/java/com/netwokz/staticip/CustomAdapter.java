@@ -1,60 +1,88 @@
 package com.netwokz.staticip;
 
-import android.util.Log;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
+import java.util.List;
 
-public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> {
+public class CustomAdapter extends RecyclerView.Adapter<StaticIpViewHolder> {
 
-    private ArrayList<StaticIpRecord> dataSet;
+    List<StaticIpRecord> mStaticIpList;
+    private OnCardLongClickListener mListener;
+    Context mContext;
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
-
-        TextView textViewName;
-        TextView textViewVersion;
-        ImageView imageViewIcon;
-
-        public MyViewHolder(View itemView) {
-            super(itemView);
-            this.textViewName = itemView.findViewById(R.id.textViewName);
-            this.textViewVersion = itemView.findViewById(R.id.textViewVersion);
-            this.imageViewIcon = itemView.findViewById(R.id.imageView);
-        }
+    public interface OnCardLongClickListener {
+        // These methods are the different events and
+        // need to pass relevant arguments related to the event triggered
+        void onCardLongClick(StaticIpRecord staticIpRecord);
     }
 
-    public CustomAdapter(ArrayList<StaticIpRecord> data) {
-        this.dataSet = data;
+    public void setOnCardClickListener(OnCardLongClickListener listener) {
+        mListener = listener;
+    }
+
+    public CustomAdapter(Context context, List<StaticIpRecord> staticIps) {
+        mContext = context;
+        mStaticIpList = staticIps;
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public StaticIpViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_layout, parent, false);
-        view.setOnClickListener(MainActivity.myOnClickListener);
-        return new MyViewHolder(view);
+        StaticIpViewHolder staticIpViewHolder = new StaticIpViewHolder(view);
+        return staticIpViewHolder;
     }
 
+    //"Desktop","Laptop","Mobile","Raspberry Pi","Other"
+
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, final int listPosition) {
-        TextView textViewName = holder.textViewName;
-        TextView textViewVersion = holder.textViewVersion;
-        ImageView imageView = holder.imageViewIcon;
+    public void onBindViewHolder(final StaticIpViewHolder holder, final int i) {
+        String type = mStaticIpList.get(i).mType;
+        int resId;
+        switch (type) {
+            case "Laptop":
+                resId = R.drawable.ic_laptop_24px;
+                break;
+            case "Desktop":
+                resId = R.drawable.ic_desktop_windows_24px;
+                break;
+            case "Mobile":
+                resId = R.drawable.ic_phone_android_24px;
+                break;
+            case "Raspberry Pi":
+                resId = R.drawable.ic_devices_other_24px;
+                break;
+            default:
+                resId = R.drawable.ic_device_unknown_24px;
+        }
+        holder.mType.setImageResource(resId);
+        holder.mIp.setText(String.valueOf(mStaticIpList.get(i).mIpAddress));
+        holder.mMac.setText(mStaticIpList.get(i).mMacAddress);
+        holder.mName.setText(mStaticIpList.get(i).mName);
+        holder.mDate.setText(mStaticIpList.get(i).mDateAdded);
+        holder.mCardView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (mListener != null)
+                    mListener.onCardLongClick(mStaticIpList.get(i));
+                return true;
+            }
+        });
 
-        StaticIpRecord record = StaticIpRecord.findById(StaticIpRecord.class, listPosition + 1);
-        Log.d("CustomAdapter", "Position = " + listPosition + 1);
+    }
 
-        textViewName.setText(record.mName);
-        textViewVersion.setText(record.mDateAdded);
+    public void updateView(List<StaticIpRecord> list) {
+        mStaticIpList.clear();
+        mStaticIpList.addAll(list);
+        notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        return dataSet.size();
+        return mStaticIpList.size();
     }
 }
