@@ -1,5 +1,6 @@
 package com.netwokz.staticip;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +46,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         TextView textViewVersion = holder.textViewVersion;
         ImageView imageView = holder.imageViewIcon;
 
-        StaticIpRecord record = StaticIpRecord.findById(StaticIpRecord.class, listPosition);
+        StaticIpRecord record = StaticIpRecord.findById(StaticIpRecord.class, listPosition + 1);
+        Log.d("CustomAdapter", "Position = " + listPosition + 1);
 
         textViewName.setText(record.mName);
         textViewVersion.setText(record.mDateAdded);
