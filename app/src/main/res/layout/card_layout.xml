@@ -3,16 +3,16 @@
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="1dp"
     android:clickable="true"
     card_view:cardBackgroundColor="@color/colorWhite"
-    card_view:cardCornerRadius="10dp"
-    card_view:cardElevation="5dp"
-    card_view:cardUseCompatPadding="true">
+    card_view:cardCornerRadius="5dp"
+    card_view:cardElevation="5dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="3dp">
+        android:layout_height="wrap_content"
+        android:padding="6dp">
 
         <ImageView
             android:id="@+id/iv_type"
@@ -24,12 +24,18 @@
             android:tag="image_tag" />
 
         <TextView
+            android:id="@+id/tv_invisable"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TextView
             android:id="@+id/tv_ip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_toRightOf="@+id/iv_type"
-            android:text="IP Address" />
+            android:text="IP Address"
+            android:textSize="20dp" />
 
         <TextView
             android:id="@+id/tv_mac"
@@ -38,7 +44,8 @@
             android:layout_below="@+id/tv_ip"
             android:layout_alignStart="@+id/tv_ip"
             android:layout_gravity="center_horizontal"
-            android:text="Mac Address" />
+            android:text="Mac Address"
+            android:textSize="20dp" />
 
         <TextView
             android:id="@+id/tv_name"
@@ -46,7 +53,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_gravity="center_horizontal"
-            android:text="Device Name" />
+            android:text="Device Name"
+            android:textSize="20dp" />
 
         <TextView
             android:id="@+id/tv_date"
@@ -55,7 +63,8 @@
             android:layout_below="@+id/tv_name"
             android:layout_alignEnd="@+id/tv_name"
             android:layout_gravity="center_horizontal"
-            android:text="Date Added" />
+            android:text="Date Added"
+            android:textSize="20dp" />
 
     </RelativeLayout>
 

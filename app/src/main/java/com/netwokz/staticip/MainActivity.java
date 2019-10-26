@@ -1,6 +1,9 @@
 package com.netwokz.staticip;
 
+import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +21,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+import java.util.prefs.Preferences;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,9 +38,9 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+//        if (StaticIpRecord.count(StaticIpRecord.class) != -1)
         data = getStaticIpList();
-        //data.add(generateRandomEntry());
-        //data.add(generateRandomEntry());
+        Log.d("MainActivity", "initial data size: " + data.size());
 
         recyclerView = findViewById(R.id.my_recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -44,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-
         adapter = new CustomAdapter(this, data);
         recyclerView.setAdapter(adapter);
 
@@ -54,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 data.add(generateRandomEntry());
                 adapter.notifyDataSetChanged();
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                Log.d("MainActivity", "FAB onClick data size: " + data.size());
             }
         });
     }
@@ -73,17 +76,35 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_search:
+                adapter.notifyDataSetChanged();
+                break;
+//            case R.id.action_refresh:
+//                mAdapter.notifyDataSetChanged();
+//                break;
+            case R.id.action_settings:
+                Intent i = new Intent(this, Preferences.class);
+                startActivity(i);
+                break;
+            case R.id.action_add_generated_car:
+                data.add(generateRandomEntry());
+                adapter.notifyDataSetChanged();
+                break;
+            case R.id.action_clear_db:
+                StaticIpRecord.deleteAll(StaticIpRecord.class);
+                data.clear();
+//                List<StaticIpRecord> mList = getStaticIpList();
+//                for (int x = 0; x < mList.size(); x++) {
+//                    StaticIpRecord mRecord = mList.get(x);
+//                    mRecord.delete();
+//                    data.remove(x);
+//                }
+                adapter.notifyDataSetChanged();
+            default:
+                break;
         }
-
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     public String getRandomIp() {
@@ -99,13 +120,13 @@ public class MainActivity extends AppCompatActivity {
 //        String types[] = {"Desktop", "Laptop", "Mobile", "Raspberry Pi", "Other"};
         int type[] = {1, 2, 3, 4, 5};
         Random rand = new Random();
-        mTypes = type[rand.nextInt(5)];
+        mTypes = type[rand.nextInt(type.length)];
         return mTypes;
     }
 
     public String getRandomName() {
         String mType;
-        String types[] = {"My Main PC", "My Laptop", "My Pixel 3 XL", "Garage Pi", "Pi Hole"};
+        String types[] = {"My Main PC", "My Laptop", "My Pixel 3 XL", "Garage Pi", "Pi Hole", "Other"};
         Random rand = new Random();
         mType = types[rand.nextInt(types.length)];
         return mType;
@@ -122,16 +143,43 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public String getRandomDate() {
-        String pattern = "MM-dd-yyyy HH:mm";
+        String pattern = "MM-dd-yyyy";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.getDefault());
 
         return simpleDateFormat.format(new Date());
     }
 
     public StaticIpRecord generateRandomEntry() {
-        StaticIpRecord record = new StaticIpRecord(getRandomIp(), getRandomMacAddress(), getRandomType(), getRandomName(), getRandomDate());
+        String mName = getRandomName();
+        int mType;
+        switch (mName) {
+            case "My Main PC":
+                mType = 1;
+                break;
+            case "My Laptop":
+                mType = 2;
+                break;
+            case "My Pixel 3 XL":
+                mType = 3;
+                break;
+            case "Garage Pi":
+                mType = 4;
+                break;
+            case "Pi Hole":
+                mType = 5;
+                break;
+            default:
+                mType = 6;
+        }
+
+        StaticIpRecord record = new StaticIpRecord(getRandomIp(), getRandomMacAddress(), mType, mName, getRandomDate());
         record.save();
         return record;
     }
 
+    private void showNewVehicleDialog() {
+        FragmentManager fm = getFragmentManager();
+        NewStaticIpDialog editNameDialogFragment = NewStaticIpDialog.newInstance();
+        editNameDialogFragment.show(fm, "fragment_new_vehicle");
+    }
 }

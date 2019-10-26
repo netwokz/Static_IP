@@ -38,57 +38,54 @@ public class CustomAdapter extends RecyclerView.Adapter<StaticIpViewHolder> {
         return staticIpViewHolder;
     }
 
-    //"Desktop","Laptop","Mobile","Raspberry Pi","Other"
-
     @Override
     public void onBindViewHolder(final StaticIpViewHolder holder, final int i) {
         final StaticIpRecord tempRecord = mStaticIpList.get(i);
-//        String type = mStaticIpList.get(i).mType;
         int type = tempRecord.mType;
-        Log.d("CustomAdapter", String.valueOf(type));
-        int resId;
+//        Log.d("CustomAdapter", String.valueOf(type));
         switch (type) {
-//            case "Laptop":
             case 1:
-                holder.mType.setImageResource(R.drawable.ic_laptop_24px);
-//                resId = R.drawable.ic_laptop_24px;
-                break;
-//            case "Desktop":
-            case 2:
                 holder.mType.setImageResource(R.drawable.ic_desktop_windows_24px);
-//                resId = R.drawable.ic_desktop_windows_24px;
                 break;
-//            case "Mobile":
+            case 2:
+                holder.mType.setImageResource(R.drawable.ic_laptop_24px);
+                break;
             case 3:
                 holder.mType.setImageResource(R.drawable.ic_phone_android_24px);
-//                resId = R.drawable.ic_phone_android_24px;
                 break;
-//            case "Raspberry Pi":
             case 4:
                 holder.mType.setImageResource(R.drawable.ic_devices_other_24px);
-//                resId = R.drawable.ic_devices_other_24px;
+                break;
+            case 5:
+                holder.mType.setImageResource(R.drawable.ic_devices_other_24px);
                 break;
             default:
                 holder.mType.setImageResource(R.drawable.ic_device_unknown_24px);
-//                resId = R.drawable.ic_device_unknown_24px;
         }
-//        holder.mType.setImageResource(resId);
         holder.mIp.setText(tempRecord.mIpAddress);
         holder.mMac.setText(tempRecord.mMacAddress);
         holder.mName.setText(tempRecord.mName);
         holder.mDate.setText(tempRecord.mDateAdded);
-        holder.mCardView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (mListener != null)
-                    mListener.onCardLongClick(tempRecord);
-                return true;
-            }
-        });
+//        holder.mCardView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.d("CustomAdapter", "cardOnClickListener");
+//                Log.d("CustomAdapter", tempRecord.mIpAddress);
+//                Log.d("CustomAdapter", String.valueOf(i));
+//            }
+//        });
+//        holder.mCardView.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View v) {
+//                Log.d("CustomAdapter", "cardOnLongClickListener");
+//                return true;
+//            }
+//        });
     }
 
     @Override
     public int getItemCount() {
+        Log.d("CustomAdapter", String.valueOf(mStaticIpList.size()));
         return mStaticIpList.size();
     }
 }
