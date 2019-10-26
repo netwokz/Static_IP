@@ -1,7 +1,6 @@
 package com.netwokz.staticip;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,18 +12,7 @@ import java.util.List;
 public class CustomAdapter extends RecyclerView.Adapter<StaticIpViewHolder> {
 
     List<StaticIpRecord> mStaticIpList;
-    private OnCardLongClickListener mListener;
     Context mContext;
-
-    public interface OnCardLongClickListener {
-        // These methods are the different events and
-        // need to pass relevant arguments related to the event triggered
-        void onCardLongClick(StaticIpRecord staticIpRecord);
-    }
-
-    public void setOnCardClickListener(OnCardLongClickListener listener) {
-        mListener = listener;
-    }
 
     public CustomAdapter(Context context, List<StaticIpRecord> staticIps) {
         mContext = context;
@@ -85,7 +73,7 @@ public class CustomAdapter extends RecyclerView.Adapter<StaticIpViewHolder> {
 
     @Override
     public int getItemCount() {
-        Log.d("CustomAdapter", String.valueOf(mStaticIpList.size()));
+//        Log.d("CustomAdapter", String.valueOf(mStaticIpList.size()));
         return mStaticIpList.size();
     }
 }

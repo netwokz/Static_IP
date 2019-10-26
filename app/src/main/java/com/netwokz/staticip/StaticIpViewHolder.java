@@ -1,7 +1,9 @@
 package com.netwokz.staticip;
 
+import android.graphics.Color;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.ContextMenu;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -35,32 +37,18 @@ public class StaticIpViewHolder extends RecyclerView.ViewHolder implements View.
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        menu.setHeaderTitle("Select Action");
-        MenuItem edit = menu.add(Menu.NONE, 1, 1, "Edit");
-        MenuItem delete = menu.add(Menu.NONE, 2, 2, "Delete");
-
-        edit.setOnMenuItemClickListener(onChange);
-        delete.setOnMenuItemClickListener(onChange);
+        menu.add(this.getAdapterPosition(), 1, 1, "Edit");
+        menu.add(this.getAdapterPosition(), 2, 2, "Delete");
+        int positionOfMenuItem = 1; // or whatever...
+        MenuItem item = menu.getItem(positionOfMenuItem);
+        SpannableString s = new SpannableString("Delete");
+        s.setSpan(new ForegroundColorSpan(Color.RED), 0, s.length(), 0);
+        item.setTitle(s);
     }
 
     @Override
     public void onClick(View v) {
 
     }
-
-    private final MenuItem.OnMenuItemClickListener onChange = new MenuItem.OnMenuItemClickListener() {
-        @Override
-        public boolean onMenuItemClick(MenuItem item) {
-            switch (item.getItemId()) {
-                case 1:
-
-                    return true;
-                case 2:
-
-                    return true;
-            }
-            return false;
-        }
-    };
 
 }

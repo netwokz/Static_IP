@@ -6,7 +6,7 @@
     <string name="clear_db">Clear DB</string>
     <string name="settings">Settings</string>
     <string name="refresh">Refresh</string>
-    <string name="generate_vehicle">Generate Vehicle</string>
+    <string name="generate_vehicle">Generate IP</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
 

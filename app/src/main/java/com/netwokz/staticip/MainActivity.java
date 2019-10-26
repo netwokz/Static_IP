@@ -1,6 +1,7 @@
 package com.netwokz.staticip;
 
 import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -55,8 +58,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                data.add(generateRandomEntry());
-                adapter.notifyDataSetChanged();
+                showNewIpDialog();
                 Log.d("MainActivity", "FAB onClick data size: " + data.size());
             }
         });
@@ -115,15 +117,6 @@ public class MainActivity extends AppCompatActivity {
         return mRandomIp;
     }
 
-    public int getRandomType() {
-        int mTypes;
-//        String types[] = {"Desktop", "Laptop", "Mobile", "Raspberry Pi", "Other"};
-        int type[] = {1, 2, 3, 4, 5};
-        Random rand = new Random();
-        mTypes = type[rand.nextInt(type.length)];
-        return mTypes;
-    }
-
     public String getRandomName() {
         String mType;
         String types[] = {"My Main PC", "My Laptop", "My Pixel 3 XL", "Garage Pi", "Pi Hole", "Other"};
@@ -139,7 +132,9 @@ public class MainActivity extends AppCompatActivity {
             int n = r.nextInt(255);
             mac += String.format("%02x", n);
         }
-        return mac.toUpperCase();
+        String finishedMac = mac.toUpperCase().replaceAll("..(?!$)", "$0:");
+
+        return finishedMac;
     }
 
     public String getRandomDate() {
@@ -177,9 +172,74 @@ public class MainActivity extends AppCompatActivity {
         return record;
     }
 
-    private void showNewVehicleDialog() {
+    private void showNewIpDialog() {
         FragmentManager fm = getFragmentManager();
-        NewStaticIpDialog editNameDialogFragment = NewStaticIpDialog.newInstance();
-        editNameDialogFragment.show(fm, "fragment_new_vehicle");
+        NewStaticIpDialog newDialogFragment = NewStaticIpDialog.newInstance();
+        newDialogFragment.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                updateIpListView();
+            }
+        });
+        newDialogFragment.show(fm, "fragment_new_ip");
     }
+
+    public void showEditIpDialog(int id) {
+        Bundle bundle = new Bundle();
+        bundle.putLong("id", data.get(id).getId());
+        FragmentManager fm = getFragmentManager();
+        EditIpDialog editIpDialog = EditIpDialog.newInstance();
+        editIpDialog.setArguments(bundle);
+        editIpDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                updateIpListView();
+            }
+        });
+        editIpDialog.show(fm, "fragment_edit_ip");
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case 1:
+//                displayMessage("Edit Item");
+                showEditIpDialog(item.getGroupId());
+                return true;
+            case 2:
+//                displayMessage("Delete Item");
+                Log.d("MainActivity", "Delete Item " + item.getGroupId() + " ID: " + data.get(item.getGroupId()).getId());
+                deleteIpRecord(data.get(item.getGroupId()).getId(), item.getGroupId());
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
+    public void deleteIpRecord(final long recordId, final int position) {
+        final StaticIpRecord oldRecord = StaticIpRecord.findById(StaticIpRecord.class, recordId);
+        data.remove(position);
+        oldRecord.delete();
+        adapter.notifyDataSetChanged();
+        final Snackbar snackbar = Snackbar
+                .make(findViewById(R.id.root_view), "Record " + position + " is removed", Snackbar.LENGTH_LONG)
+                .setAction("Undo", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new StaticIpRecord(oldRecord).save();
+                        data.add(position, oldRecord);
+                        adapter.notifyDataSetChanged();
+                        Snackbar snackbar1 = Snackbar.make(findViewById(R.id.root_view), "Record restored.", Snackbar.LENGTH_SHORT);
+                        snackbar1.show();
+                    }
+                });
+        snackbar.show();
+    }
+
+    public void updateIpListView() {
+        data.clear();
+        data.addAll(getStaticIpList());
+        adapter.notifyDataSetChanged();
+    }
+
 }
