@@ -9,7 +9,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -43,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
 //        if (StaticIpRecord.count(StaticIpRecord.class) != -1)
         data = getStaticIpList();
-        Log.d("MainActivity", "initial data size: " + data.size());
+//        Log.d("MainActivity", "initial data size: " + data.size());
 
         recyclerView = findViewById(R.id.my_recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -200,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onContextItemSelected(@NonNull MenuItem item) {
+    public boolean onContextItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case 1:
 //                displayMessage("Edit Item");
