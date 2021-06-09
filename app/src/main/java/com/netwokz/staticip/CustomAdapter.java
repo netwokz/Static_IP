@@ -22,8 +22,7 @@ public class CustomAdapter extends RecyclerView.Adapter<StaticIpViewHolder> {
     @Override
     public StaticIpViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_layout, parent, false);
-        StaticIpViewHolder staticIpViewHolder = new StaticIpViewHolder(view);
-        return staticIpViewHolder;
+        return new StaticIpViewHolder(view);
     }
 
     @Override
@@ -33,18 +32,21 @@ public class CustomAdapter extends RecyclerView.Adapter<StaticIpViewHolder> {
 //        Log.d("CustomAdapter", String.valueOf(type));
         switch (type) {
             case 1:
-                holder.mType.setImageResource(R.drawable.ic_desktop_windows_24px);
+                holder.mType.setImageResource(R.drawable.ic_server_black_24dp);
                 break;
             case 2:
-                holder.mType.setImageResource(R.drawable.ic_laptop_24px);
+                holder.mType.setImageResource(R.drawable.ic_desktop_windows_24px);
                 break;
             case 3:
-                holder.mType.setImageResource(R.drawable.ic_phone_android_24px);
+                holder.mType.setImageResource(R.drawable.ic_laptop_24px);
                 break;
             case 4:
-                holder.mType.setImageResource(R.drawable.ic_devices_other_24px);
+                holder.mType.setImageResource(R.drawable.ic_phone_android_24px);
                 break;
             case 5:
+                holder.mType.setImageResource(R.drawable.ic_devices_other_24px);
+                break;
+            case 6:
                 holder.mType.setImageResource(R.drawable.ic_devices_other_24px);
                 break;
             default:
@@ -53,7 +55,7 @@ public class CustomAdapter extends RecyclerView.Adapter<StaticIpViewHolder> {
         holder.mIp.setText(tempRecord.mIpAddress);
         holder.mMac.setText(tempRecord.mMacAddress);
         holder.mName.setText(tempRecord.mName);
-        holder.mDate.setText(tempRecord.mDateAdded);
+//        holder.mDate.setText(tempRecord.mDateAdded);
 //        holder.mCardView.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {

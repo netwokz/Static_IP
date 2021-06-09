@@ -63,7 +63,6 @@
             android:layout_below="@+id/tv_name"
             android:layout_alignEnd="@+id/tv_name"
             android:layout_gravity="center_horizontal"
-            android:text="Date Added"
             android:textSize="20dp" />
 
     </RelativeLayout>
